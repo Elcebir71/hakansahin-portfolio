@@ -5,19 +5,39 @@ import { about } from "../data/resume";
 <section id="about" class="py-24 md:py-32">
   <div class="max-w-6xl mx-auto px-6">
     <div class="text-center mb-16 fade-up">
-      <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-slate-50">
+      <h2
+        class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-slate-50"
+      >
         About Me
       </h2>
       <div class="section-line"></div>
     </div>
 
-    <div class="grid md:grid-cols-5 gap-12 md:gap-16 items-start">
+    <div class="grid md:grid-cols-5 gap-12 md:gap-16 items-center">
+      <!-- Avatar + Description -->
       <div class="md:col-span-3 fade-up">
-        <p class="text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300 font-light">
-          {about.description}
-        </p>
+        <div class="flex flex-col sm:flex-row items-start gap-8 mb-8">
+          <div class="shrink-0">
+            <div
+              class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border-2 border-amber-500/20 dark:border-amber-400/20 shadow-lg shadow-amber-500/5"
+            >
+              <img
+                src="/images/avatar.png"
+                alt="Hakan Sahin — Geometric avatar"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+          <p
+            class="text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300 font-light"
+          >
+            {about.description}
+          </p>
+        </div>
       </div>
 
+      <!-- Highlights -->
       <div class="md:col-span-2 grid grid-cols-2 gap-4 stagger">
         {
           about.highlights.map((item) => (
@@ -31,6 +51,29 @@ import { about } from "../data/resume";
             </div>
           ))
         }
+      </div>
+    </div>
+
+    <!-- World Map -->
+    <div class="mt-16 md:mt-20 fade-up">
+      <p
+        class="text-xs font-medium tracking-[0.2em] uppercase text-amber-500 dark:text-amber-400 text-center mb-6"
+      >
+        Global Journey — 8 Countries, 4 Continents
+      </p>
+      <div
+        class="relative rounded-3xl overflow-hidden border border-slate-200/30 dark:border-slate-800/30"
+      >
+        <img
+          src="/images/world-map.png"
+          alt="World map showing Hakan's international journey across 8 countries"
+          class="w-full h-auto opacity-80 dark:opacity-100"
+          loading="lazy"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-stone-50 via-transparent to-transparent dark:from-slate-950 dark:via-transparent dark:to-transparent"
+        >
+        </div>
       </div>
     </div>
   </div>

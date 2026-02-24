@@ -249,6 +249,7 @@ export const projects = [
       "Contributing to a modern enterprise web application built with Blazor and .NET, applying clean architecture principles, component-based development, and comprehensive testing.",
     tags: ["C#", ".NET", "Blazor", "Entity Framework"],
     link: "",
+    image: "/images/project-camas.png",
   },
   {
     title: "Fetal Risk Classification — ML Research",
@@ -256,5 +257,6 @@ export const projects = [
       "Published research on machine learning techniques for classifying cardiotocogram data to predict fetal health risks, with papers in international journals.",
     tags: ["Python", "Machine Learning", "Data Science", "Research"],
     link: "https://www.sciencedirect.com/science/article/pii/S1568494615002653",
+    image: "/images/project-ml.png",
   },
 ];
