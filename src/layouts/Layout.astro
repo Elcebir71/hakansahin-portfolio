@@ -45,23 +45,298 @@ const {
   <body
     class="bg-stone-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300"
   >
+    <!-- Page Loader -->
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <div class="page-loader-bg"></div>
+      <span
+        class="page-loader-logo text-4xl font-serif font-bold text-amber-500 opacity-0"
+        >HS</span
+      >
+    </div>
+
+    <!-- Custom Cursor -->
+    <div id="cursor-outer" class="cursor-outer"></div>
+    <div id="cursor-dot" class="cursor-dot"></div>
+
     <slot />
 
     <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("visible");
-            }
-          });
-        },
-        { threshold: 0.1, rootMargin: "0px 0px -60px 0px" }
-      );
+      import Lenis from "lenis";
+      import gsap from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-      document
-        .querySelectorAll(".fade-up, .stagger")
-        .forEach((el) => observer.observe(el));
+      gsap.registerPlugin(ScrollTrigger);
+
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      // ─── Lenis Smooth Scrolling ───
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+      });
+
+      lenis.on("scroll", ScrollTrigger.update);
+
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0);
+
+      // ─── Anchor Link Integration with Lenis ───
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", (e) => {
+          const href = anchor.getAttribute("href");
+          if (!href || href === "#") return;
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            lenis.scrollTo(target as HTMLElement, { offset: -80 });
+          }
+        });
+      });
+
+      // ─── Page Loader Animation ───
+      const loader = document.getElementById("page-loader");
+      const loaderBg = loader?.querySelector(".page-loader-bg") as HTMLElement;
+      const loaderLogo = loader?.querySelector(
+        ".page-loader-logo"
+      ) as HTMLElement;
+
+      const masterTl = gsap.timeline({
+        onComplete: () => loader?.remove(),
+      });
+
+      if (!prefersReducedMotion && loader && loaderBg && loaderLogo) {
+        masterTl
+          .to(loaderLogo, {
+            opacity: 1,
+            duration: 0.4,
+            ease: "power2.out",
+          })
+          .to(loaderLogo, {
+            opacity: 0,
+            scale: 0.8,
+            duration: 0.3,
+            ease: "power2.in",
+            delay: 0.2,
+          })
+          .to(loaderBg, {
+            yPercent: -100,
+            duration: 0.8,
+            ease: "power4.inOut",
+          });
+      } else {
+        loader?.remove();
+      }
+
+      // ─── Hero Entrance Animation ───
+      const heroChars = gsap.utils.toArray(".hero-char") as HTMLElement[];
+      const heroElements = [
+        ".hero-label",
+        ".hero-tagline",
+        ".hero-location",
+        ".hero-cta",
+        ".hero-social",
+        ".hero-scroll",
+      ];
+
+      if (!prefersReducedMotion && heroChars.length > 0) {
+        const heroTl = gsap.timeline({
+          delay: prefersReducedMotion ? 0 : 1.4,
+        });
+
+        heroTl.from(heroChars, {
+          y: "110%",
+          rotateX: -80,
+          opacity: 0,
+          stagger: 0.035,
+          duration: 1.3,
+          ease: "power4.out",
+        });
+
+        heroElements.forEach((selector, i) => {
+          const el = document.querySelector(selector);
+          if (el) {
+            heroTl.to(
+              el,
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out",
+              },
+              i === 0 ? "-=0.6" : "-=0.5"
+            );
+          }
+        });
+      } else {
+        heroChars.forEach((el) => {
+          el.style.opacity = "1";
+          el.style.transform = "none";
+        });
+        heroElements.forEach((selector) => {
+          const el = document.querySelector(selector) as HTMLElement;
+          if (el) {
+            el.style.opacity = "1";
+            el.style.transform = "none";
+          }
+        });
+      }
+
+      // ─── Scroll-Triggered Reveal Animations ───
+      if (!prefersReducedMotion) {
+        gsap.utils.toArray(".fade-up").forEach((el) => {
+          const element = el as HTMLElement;
+          gsap.to(element, {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
+          });
+        });
+
+        gsap.utils.toArray(".stagger").forEach((container) => {
+          const el = container as HTMLElement;
+          gsap.to(el.children, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
+          });
+        });
+      }
+
+      // ─── Parallax Effects ───
+      if (!prefersReducedMotion) {
+        gsap.utils.toArray("[data-speed]").forEach((el) => {
+          const element = el as HTMLElement;
+          const speed = parseFloat(element.dataset.speed || "0");
+          gsap.to(element, {
+            y: () => speed * ScrollTrigger.maxScroll(window) * 0.05,
+            ease: "none",
+            scrollTrigger: {
+              trigger: element.closest("section") || element,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 0.5,
+            },
+          });
+        });
+      }
+
+      // ─── Horizontal Scroll (Projects) ───
+      const projectsSection = document.querySelector(".projects-horizontal");
+      const projectsTrack = document.querySelector(
+        ".projects-track"
+      ) as HTMLElement;
+
+      if (!prefersReducedMotion && projectsSection && projectsTrack) {
+        const getScrollAmount = () =>
+          projectsTrack.scrollWidth - window.innerWidth;
+
+        gsap.to(projectsTrack, {
+          x: () => -getScrollAmount(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: projectsSection,
+            pin: true,
+            scrub: 1,
+            end: () => `+=${getScrollAmount()}`,
+            invalidateOnRefresh: true,
+          },
+        });
+      }
+
+      // ─── Custom Cursor ───
+      const cursorOuter = document.getElementById("cursor-outer");
+      const cursorDot = document.getElementById("cursor-dot");
+      const isFinePointer = window.matchMedia(
+        "(hover: hover) and (pointer: fine)"
+      ).matches;
+
+      if (isFinePointer && cursorOuter && cursorDot) {
+        let mx = -100,
+          my = -100;
+
+        gsap.set([cursorOuter, cursorDot], { x: -100, y: -100 });
+
+        window.addEventListener("mousemove", (e) => {
+          mx = e.clientX;
+          my = e.clientY;
+          gsap.to(cursorDot, { x: mx, y: my, duration: 0.15, overwrite: true });
+          gsap.to(cursorOuter, {
+            x: mx,
+            y: my,
+            duration: 0.4,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        });
+
+        const interactiveEls = document.querySelectorAll(
+          "a, button, [data-magnetic], [data-cursor-hover]"
+        );
+        interactiveEls.forEach((el) => {
+          el.addEventListener("mouseenter", () => {
+            gsap.to(cursorOuter, {
+              scale: 1.8,
+              borderColor: "rgba(245, 158, 11, 0.6)",
+              duration: 0.3,
+            });
+            gsap.to(cursorDot, { scale: 0, duration: 0.2 });
+          });
+          el.addEventListener("mouseleave", () => {
+            gsap.to(cursorOuter, {
+              scale: 1,
+              borderColor: "rgba(245, 158, 11, 0.4)",
+              duration: 0.3,
+            });
+            gsap.to(cursorDot, { scale: 1, duration: 0.2 });
+          });
+        });
+
+        // ─── Magnetic Effect ───
+        document.querySelectorAll("[data-magnetic]").forEach((el) => {
+          el.addEventListener("mousemove", (e) => {
+            const rect = (el as HTMLElement).getBoundingClientRect();
+            const x =
+              (e as MouseEvent).clientX - rect.left - rect.width / 2;
+            const y =
+              (e as MouseEvent).clientY - rect.top - rect.height / 2;
+            gsap.to(el, {
+              x: x * 0.3,
+              y: y * 0.3,
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          });
+          el.addEventListener("mouseleave", () => {
+            gsap.to(el, {
+              x: 0,
+              y: 0,
+              duration: 0.5,
+              ease: "elastic.out(1, 0.3)",
+            });
+          });
+        });
+      } else {
+        cursorOuter?.remove();
+        cursorDot?.remove();
+      }
     </script>
   </body>
 </html>
