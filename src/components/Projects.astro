@@ -1,0 +1,79 @@
+---
+import { projects } from "../data/resume";
+---
+
+<section id="projects" class="py-24 md:py-32">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16 fade-up">
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-slate-50">
+        Projects
+      </h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 stagger">
+      {
+        projects.map((project) => (
+          <div class="group p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60 hover:border-amber-500/30 dark:hover:border-amber-400/30 transition-all duration-300 hover:shadow-lg hover:shadow-slate-200/50 dark:hover:shadow-slate-900/50 flex flex-col">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/10 dark:bg-amber-400/10 flex items-center justify-center shrink-0">
+                <svg
+                  class="w-5 h-5 text-amber-500 dark:text-amber-400"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+                  />
+                </svg>
+              </div>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 transition-colors"
+                  aria-label={`View ${project.title}`}
+                >
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                    />
+                  </svg>
+                </a>
+              )}
+            </div>
+
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50 mb-2">
+              {project.title}
+            </h3>
+
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-light mb-6 flex-1">
+              {project.description}
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-amber-500/10 dark:bg-amber-400/10 text-amber-600 dark:text-amber-400">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
