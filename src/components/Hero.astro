@@ -15,11 +15,11 @@ const nameWords = personalInfo.name.split(" ");
     </div>
   </div>
 
-  <div class="relative w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-    <!-- Left: City Image -->
+  <div class="relative w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[7fr_3fr] gap-6 lg:gap-10 items-center">
+    <!-- Left: City Image (70%) -->
     <div class="order-2 lg:order-1 flex justify-center lg:justify-start" data-speed="-0.3">
-      <div class="relative group">
-        <div class="w-full max-w-lg aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/40 border border-slate-200/30 dark:border-slate-700/30">
+      <div class="relative group w-full">
+        <div class="w-full aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/40 border border-slate-200/30 dark:border-slate-700/30">
           <img
             src="/images/hero-city.png"
             alt="Global cityscape at night"
@@ -50,7 +50,7 @@ const nameWords = personalInfo.name.split(" ");
             <span class="block leading-[0.9] mb-2 lg:text-right">
               {word.split("").map((char) => (
                 <span class="char-wrap">
-                  <span class="hero-char font-serif font-bold text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[8vw] text-slate-900 dark:text-slate-50">
+                  <span class="hero-char font-serif font-bold text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[5.5vw] text-slate-900 dark:text-slate-50">
                     {char}
                   </span>
                 </span>
