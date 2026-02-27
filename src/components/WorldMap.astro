@@ -255,35 +255,6 @@ const journey = [
     );
   }
 
-  function createArcPoints(start: THREE.Vector3, end: THREE.Vector3, segments = 50): THREE.Vector3[] {
-    const points: THREE.Vector3[] = [];
-    const dist = start.distanceTo(end);
-    const midHeight = 1.0 + dist * 0.15;
-
-    for (let i = 0; i <= segments; i++) {
-      const t = i / segments;
-      const point = new THREE.Vector3().lerpVectors(start, end, t);
-      const elevation = Math.sin(t * Math.PI) * (midHeight - 1.0);
-      point.normalize().multiplyScalar(1.0 + elevation);
-      points.push(point);
-    }
-    return points;
-  }
-
-  const arcMaterial = new THREE.LineBasicMaterial({
-    color: 0xf59e0b,
-    transparent: true,
-    opacity: 0.35,
-  });
-
-  for (let i = 0; i < journeyData.length - 1; i++) {
-    const start = latLonToVec3(journeyData[i].lat, journeyData[i].lon, 1.001);
-    const end = latLonToVec3(journeyData[i + 1].lat, journeyData[i + 1].lon, 1.001);
-    const curvePoints = createArcPoints(start, end);
-    const geometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
-    const line = new THREE.Line(geometry, arcMaterial);
-    globe.add(line);
-  }
 
   // ─── Marker Projection ───
   function projectToScreen(lat: number, lon: number): { x: number; y: number; visible: boolean } {
