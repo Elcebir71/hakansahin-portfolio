@@ -252,6 +252,14 @@ export const projects = [
     image: "/images/project-camas.png",
   },
   {
+    title: "Corporate Energy API",
+    description:
+      "A full-stack energy management application built with .NET and Blazor, featuring REST API endpoints for corporate energy consumption tracking, weather-based energy price analysis, and interactive dashboards.",
+    tags: ["C#", ".NET", "Blazor", "REST API", "Python", "Data Analysis"],
+    link: "https://github.com/Elcebir71/CorporateEnergyAPI",
+    image: "/images/project-energy-api.png",
+  },
+  {
     title: "Fetal Risk Classification — ML Research",
     description:
       "Published research on machine learning techniques for classifying cardiotocogram data to predict fetal health risks, with papers in international journals.",
