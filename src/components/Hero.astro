@@ -7,6 +7,14 @@ function turkishUpper(str: string): string {
 }
 
 const nameWords = personalInfo.name.split(" ");
+
+const heroImages = [
+  "/images/hero-city.png",
+  "/images/hero-city-2.png",
+  "/images/hero-city-3.png",
+  "/images/hero-city-4.png",
+  "/images/hero-city-5.png",
+];
 ---
 
 <section
@@ -22,17 +30,35 @@ const nameWords = personalInfo.name.split(" ");
   </div>
 
   <div class="relative w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[7fr_3fr] gap-6 lg:gap-10 items-center">
-    <!-- Left: City Image (70%) -->
+    <!-- Left: City Image Slider (70%) -->
     <div class="order-2 lg:order-1 flex justify-center lg:justify-start" data-speed="-0.3">
-      <div class="relative group w-full">
-        <div class="w-full aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/40 border border-slate-200/30 dark:border-slate-700/30">
-          <img
-            src="/images/hero-city.png"
-            alt="Global cityscape at night"
-            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            loading="eager"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-stone-50/40 via-transparent to-transparent dark:from-slate-950/40 dark:via-transparent dark:to-transparent"></div>
+      <div class="relative w-full">
+        <div class="w-full aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/40 border border-slate-200/30 dark:border-slate-700/30 relative">
+          {heroImages.map((src, i) => (
+            <img
+              src={src}
+              alt={`Cityscape ${i + 1}`}
+              class:list={[
+                "hero-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out",
+                i === 0 ? "opacity-100" : "opacity-0",
+              ]}
+              data-slide={i}
+              loading={i === 0 ? "eager" : "lazy"}
+            />
+          ))}
+          <div class="absolute inset-0 bg-gradient-to-t from-stone-50/40 via-transparent to-transparent dark:from-slate-950/40 dark:via-transparent dark:to-transparent z-10"></div>
+          <!-- Slide indicators -->
+          <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+            {heroImages.map((_, i) => (
+              <button
+                class:list={[
+                  "hero-dot w-1.5 h-1.5 rounded-full transition-all duration-300",
+                  i === 0 ? "bg-amber-400 w-4" : "bg-white/40",
+                ]}
+                data-dot={i}
+              />
+            ))}
+          </div>
         </div>
         <!-- Decorative accents -->
         <div class="absolute -bottom-3 -right-3 w-32 h-32 border border-amber-500/10 rounded-3xl -z-10"></div>
@@ -154,6 +180,31 @@ const nameWords = personalInfo.name.split(" ");
       </div>
     </div>
   </div>
+
+  <script>
+    const slides = document.querySelectorAll<HTMLElement>(".hero-slide");
+    const dots = document.querySelectorAll<HTMLElement>(".hero-dot");
+    let current = 0;
+    const total = slides.length;
+
+    function goTo(index: number) {
+      slides[current].style.opacity = "0";
+      dots[current].classList.remove("bg-amber-400", "w-4");
+      dots[current].classList.add("bg-white/40");
+
+      current = index % total;
+
+      slides[current].style.opacity = "1";
+      dots[current].classList.remove("bg-white/40");
+      dots[current].classList.add("bg-amber-400", "w-4");
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener("click", () => goTo(i));
+    });
+
+    setInterval(() => goTo(current + 1), 4000);
+  </script>
 
   <!-- Scroll indicator -->
   <div
