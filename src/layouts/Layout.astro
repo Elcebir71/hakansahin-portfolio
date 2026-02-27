@@ -54,10 +54,6 @@ const {
       >
     </div>
 
-    <!-- Custom Cursor -->
-    <div id="cursor-outer" class="cursor-outer"></div>
-    <div id="cursor-dot" class="cursor-dot"></div>
-
     <slot />
 
     <script>
@@ -261,55 +257,12 @@ const {
         });
       }
 
-      // ─── Custom Cursor ───
-      const cursorOuter = document.getElementById("cursor-outer");
-      const cursorDot = document.getElementById("cursor-dot");
+      // ─── Magnetic Effect ───
       const isFinePointer = window.matchMedia(
         "(hover: hover) and (pointer: fine)"
       ).matches;
 
-      if (isFinePointer && cursorOuter && cursorDot) {
-        let mx = -100,
-          my = -100;
-
-        gsap.set([cursorOuter, cursorDot], { x: -100, y: -100 });
-
-        window.addEventListener("mousemove", (e) => {
-          mx = e.clientX;
-          my = e.clientY;
-          gsap.to(cursorDot, { x: mx, y: my, duration: 0.15, overwrite: true });
-          gsap.to(cursorOuter, {
-            x: mx,
-            y: my,
-            duration: 0.4,
-            ease: "power2.out",
-            overwrite: true,
-          });
-        });
-
-        const interactiveEls = document.querySelectorAll(
-          "a, button, [data-magnetic], [data-cursor-hover]"
-        );
-        interactiveEls.forEach((el) => {
-          el.addEventListener("mouseenter", () => {
-            gsap.to(cursorOuter, {
-              scale: 1.8,
-              borderColor: "rgba(245, 158, 11, 0.6)",
-              duration: 0.3,
-            });
-            gsap.to(cursorDot, { scale: 0, duration: 0.2 });
-          });
-          el.addEventListener("mouseleave", () => {
-            gsap.to(cursorOuter, {
-              scale: 1,
-              borderColor: "rgba(245, 158, 11, 0.4)",
-              duration: 0.3,
-            });
-            gsap.to(cursorDot, { scale: 1, duration: 0.2 });
-          });
-        });
-
-        // ─── Magnetic Effect ───
+      if (isFinePointer) {
         document.querySelectorAll("[data-magnetic]").forEach((el) => {
           el.addEventListener("mousemove", (e) => {
             const rect = (el as HTMLElement).getBoundingClientRect();
@@ -333,9 +286,6 @@ const {
             });
           });
         });
-      } else {
-        cursorOuter?.remove();
-        cursorDot?.remove();
       }
     </script>
   </body>
