@@ -1,5 +1,11 @@
 ---
 import { personalInfo } from "../data/resume";
+
+function turkishUpper(str: string): string {
+  return str.replace(/i/g, 'İ').replace(/ı/g, 'I').replace(/ş/g, 'Ş').replace(/ç/g, 'Ç')
+            .replace(/ğ/g, 'Ğ').replace(/ö/g, 'Ö').replace(/ü/g, 'Ü').toUpperCase();
+}
+
 const nameWords = personalInfo.name.split(" ");
 ---
 
@@ -48,7 +54,7 @@ const nameWords = personalInfo.name.split(" ");
         {
           nameWords.map((word) => (
             <span class="flex justify-center lg:justify-end leading-[0.85] mb-1">
-              {word.toLocaleUpperCase('tr').split("").map((char) => (
+              {turkishUpper(word).split("").map((char) => (
                 <span class="char-wrap">
                   <span class="hero-char text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[5.5vw] text-slate-900 dark:text-slate-50" style="font-family: 'Bebas Neue', sans-serif;">
                     {char}
