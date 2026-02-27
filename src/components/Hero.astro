@@ -47,10 +47,10 @@ const nameWords = personalInfo.name.split(" ");
       <h1 class="hero-title mb-10">
         {
           nameWords.map((word) => (
-            <span class="flex justify-between leading-[0.9] mb-2">
-              {word.split("").map((char) => (
+            <span class="flex justify-between leading-[0.85] mb-1">
+              {word.toUpperCase().split("").map((char) => (
                 <span class="char-wrap">
-                  <span class="hero-char font-serif font-bold text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[5.5vw] text-slate-900 dark:text-slate-50">
+                  <span class="hero-char text-[16vw] sm:text-[14vw] md:text-[12vw] lg:text-[5.5vw] text-slate-900 dark:text-slate-50" style="font-family: 'Bebas Neue', sans-serif;">
                     {char}
                   </span>
                 </span>
